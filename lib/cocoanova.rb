@@ -2,14 +2,31 @@ require 'rubygems'
 require 'active_support/all'
 
 module Nova
+    Plugines    = []
+
     @@root      = nil
     @@src_root  = nil
+    @@data      = {}
 
     autoload :VERSION, 'cocoanova/version'
     autoload :Loader,  'cocoanova/loader'
     autoload :Engine,  'cocoanova/engine'
     autoload :Helper,  'cocoanova/helper'
     autoload :Task,    'cocoanova/task'
+
+    # Register Plugin
+    def register_plugin(path)
+        Plugins << path
+    end
+
+    # Global data
+    def self.data
+        @@data
+    end
+
+    def self.data=(value)
+        @@data = value
+    end
 
     # Get preset_path, i.e. lib/cocoanova
     def self.preset_path
@@ -41,6 +58,12 @@ module Nova
         # Require folder from preset path, i.e. lib/cocoanova/
         Dir["#{self.preset_path}/#{folder}/**/*.rb"].each do |file|
             require file
+        end
+        # Load Plugins
+        Plugins.each do |path|
+            Dir["#{path}/#{folder}/**/*.rb"].each do |file|
+                require file
+            end
         end
         # Require folder from local nova path, i.e. ./nova/
         if self.root
