@@ -1,0 +1,39 @@
+#!/usr/bin/env ruby
+
+require 'yaml'
+require 'cocoanova'
+
+config = { 'root'=> Dir.pwd }
+
+# Load novarc
+if File.exists? './.novarc'
+    config.merge! YAML.load_file './novarc'
+end
+
+# Generate root_src
+config['root']      = File.expand_path(config['root'], Dir.pwd)
+config['src_root'] ||= File.expand_path('../nova', config['root'])
+config['src_root']  = File.expand_path(config['src_root'], Dir.pwd)
+
+# Set project root to ./
+Nova.src_root = Dir.pwd
+# Set local nova root to ./nova
+Nova.root     = Dir.pwd + "/nova"
+
+# Load Tasks
+Nova::Task.require_all
+
+# Execute task or print tasks
+if ARGV.first.nil?
+    puts "Nova Xcode Project Pre-build System"
+    Nova::Task::Tasks.each_pair do |key, value|
+        puts "Task: #{key}"
+        Array.wrap(value).each do |task|
+            puts "  -#{task}"
+        end
+        puts ""
+    end
+else
+    puts "======== Task: #{ARGV.first} =========="
+    Nova::Task.invoke(ARGV.first)
+end
