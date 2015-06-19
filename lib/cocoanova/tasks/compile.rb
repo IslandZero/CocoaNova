@@ -3,7 +3,7 @@ class Nova::Task::Compile < Nova::Task
 
     def load_data
         # Load regular data
-        Dir["#{Nova.root}/data/*"].each do |file|
+        Dir["#{Nova.local_root}/data/*"].each do |file|
             key     = File.basename(file).split('.').first.downcase.to_sym
             extname = file.split('.').last.to_sym
             if Nova::Loader.supported_extensions.include?(extname)
@@ -20,7 +20,7 @@ class Nova::Task::Compile < Nova::Task
     end
 
     def invoke(params = {})
-        raise "Nova.root not set"       unless Nova.root
+        raise "Nova.local_root not set" unless Nova.local_root
         raise "Nova.src_root not set"   unless Nova.src_root
 
         Nova::Helper.require_all

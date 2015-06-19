@@ -4,7 +4,7 @@ require 'active_support/all'
 module Nova
     Plugins     = []
 
-    @@root      = nil
+    @@local_root= nil
     @@src_root  = nil
     @@data      = {}
 
@@ -44,13 +44,13 @@ module Nova
     end
 
     # Get local nova root
-    def self.root
-        @@root
+    def self.local_root
+        @@local_root
     end
 
     # Set local nova root
-    def self.root=(value)
-        @@root = value
+    def self.local_root=(value)
+        @@local_root = value
     end
 
     # Require a folder in both preset path and local path
@@ -66,8 +66,8 @@ module Nova
             end
         end
         # Require folder from local nova path, i.e. ./nova/
-        if self.root
-            Dir["#{self.root}/#{folder}/**/*.rb"].each do |file|
+        if self.local_root
+            Dir["#{self.local_root}/#{folder}/**/*.rb"].each do |file|
                 require file
             end
         end
