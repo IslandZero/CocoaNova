@@ -12,4 +12,6 @@ Gem::Specification.new do |s|
     s.homepage    =
         'http://rubygems.org/gems/cocoanova'
     s.license       = 'MIT'
+
+    s.add_runtime_dependency 'activesupport', '~> 4.0.0'
 end

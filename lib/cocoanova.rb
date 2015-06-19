@@ -2,7 +2,7 @@ require 'rubygems'
 require 'active_support/all'
 
 module Nova
-    Plugines    = []
+    Plugins     = []
 
     @@root      = nil
     @@src_root  = nil
@@ -15,7 +15,7 @@ module Nova
     autoload :Task,    'cocoanova/task'
 
     # Register Plugin
-    def register_plugin(path)
+    def self.register_plugin(path)
         Plugins << path
     end
 
@@ -57,17 +57,20 @@ module Nova
     def self.require_folder(folder)
         # Require folder from preset path, i.e. lib/cocoanova/
         Dir["#{self.preset_path}/#{folder}/**/*.rb"].each do |file|
+            puts "requiring", file
             require file
         end
         # Load Plugins
         Plugins.each do |path|
             Dir["#{path}/#{folder}/**/*.rb"].each do |file|
+            puts "requiring", file
                 require file
             end
         end
         # Require folder from local nova path, i.e. ./nova/
         if self.root
             Dir["#{self.root}/#{folder}/**/*.rb"].each do |file|
+            puts "requiring", file
                 require file
             end
         end

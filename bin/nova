@@ -7,13 +7,18 @@ config = { 'root'=> Dir.pwd }
 
 # Load novarc
 if File.exists? './.novarc'
-    config.merge! YAML.load_file './novarc'
+    config.merge! YAML.load_file './.novarc'
 end
 
 # Generate root_src
 config['root']      = File.expand_path(config['root'], Dir.pwd)
 config['src_root'] ||= File.expand_path('../nova', config['root'])
 config['src_root']  = File.expand_path(config['src_root'], Dir.pwd)
+
+# Require plugins
+Array.wrap(config['plugins']).each do |plugin|
+    require plugin
+end
 
 # Set project root to ./
 Nova.src_root = Dir.pwd
