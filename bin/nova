@@ -33,7 +33,7 @@ Nova::Task.require_all
 
 # Execute task or print tasks
 if ARGV.first.nil?
-    puts "Nova Xcode Project Pre-build System"
+    puts "CocoaNova Avaliable Tasks"
     Nova::Task::Tasks.each_pair do |key, value|
         puts "Task: #{key}"
         Array.wrap(value).each do |task|

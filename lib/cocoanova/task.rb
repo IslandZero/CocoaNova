@@ -19,6 +19,7 @@ module Nova
 
         def self.invoke(name, params = {})
             total = self[name].count
+            raise "Task #{name} not found" if total == 0
             self[name].each_with_index do |task, idx|
                 puts "===> #{idx + 1}/#{total} #{task}"
                 task.new.invoke(params)
